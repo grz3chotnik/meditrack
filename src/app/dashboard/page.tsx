@@ -22,8 +22,14 @@ const Page = () => {
     <div className="max-w-2xl mx-auto p-6">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-semibold">My Medicines</h1>
-        <AddMedicineDialog />
+        {isSignedIn && <AddMedicineDialog />}
       </div>
+
+      {!isSignedIn && (
+        <p className="text-sm text-foreground/50">
+          Sign in to manage your medicines.
+        </p>
+      )}
 
       <div className="flex flex-col gap-3">
         {medicines === undefined && (
@@ -41,9 +47,7 @@ const Page = () => {
           >
             <div>
               <p className="font-medium">{medicine.name}</p>
-              <p className="text-sm text-foreground/50">
-                {medicine.dosage}
-              </p>
+              <p className="text-sm text-foreground/50">{medicine.dosage}</p>
             </div>
             <button
               onClick={() => removeMedicine({ id: medicine._id })}

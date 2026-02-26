@@ -14,7 +14,7 @@ import { NavigationMenu } from "@base-ui/react/navigation-menu";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/history", label: "History" },
+  { href: "/calendar", label: "Calendar" },
 ];
 
 const Navbar = () => {

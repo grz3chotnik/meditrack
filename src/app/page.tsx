@@ -27,7 +27,7 @@ export default function Home() {
   return (
     <div className="max-w-2xl mx-auto p-6">
       <p className="text-sm text-foreground/50 mb-1">{today}</p>
-      <h1 className="text-2xl font-semibold mb-6">Today&apos;s Medicines</h1>
+      <h1 className="text-2xl font-semibold mb-6">Today's Medicines</h1>
 
       {!isSignedIn && (
         <p className="text-sm text-foreground/50">
@@ -35,17 +35,17 @@ export default function Home() {
         </p>
       )}
 
-      {isSignedIn && medicines === undefined && (
+      {isSignedIn && (medicines === undefined || takenToday === undefined) && (
         <p className="text-sm text-foreground/50">Loading...</p>
       )}
 
-      {isSignedIn && medicines?.length === 0 && (
+      {isSignedIn && medicines !== undefined && takenToday !== undefined && medicines.length === 0 && (
         <p className="text-sm text-foreground/50">
           No medicines due today. Add some from the dashboard.
         </p>
       )}
 
-      {medicines?.map((med) => {
+      {takenToday !== undefined && medicines?.map((med) => {
         const taken = takenIds.includes(med._id);
         const overdue =
           !taken &&
