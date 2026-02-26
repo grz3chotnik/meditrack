@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ConvexClientProvider } from "@/app/ConvexClientProvider";
+import { Analytics } from "@vercel/analytics/next";
+
 import {
   ClerkProvider,
   SignedIn,
@@ -32,9 +34,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-
-
   return (
     <ClerkProvider>
       <html lang="en">
@@ -44,6 +43,7 @@ export default function RootLayout({
           <ConvexClientProvider>
             <Navbar />
             {children}
+            <Analytics/>
           </ConvexClientProvider>
         </body>
       </html>
