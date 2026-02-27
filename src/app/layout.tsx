@@ -6,11 +6,6 @@ import { Analytics } from "@vercel/analytics/next";
 
 import {
   ClerkProvider,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
 } from "@clerk/nextjs";
 import Navbar from "@/app/components/navbar";
 
