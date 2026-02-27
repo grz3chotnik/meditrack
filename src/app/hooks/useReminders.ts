@@ -16,7 +16,7 @@ export function useReminders(
 ) {
   //ask for permission on first load
   useEffect(() => {
-    if (Notification.permission === "default") {
+    if (typeof Notification !== "undefined" &&  Notification.permission === "default") {
       Notification.requestPermission();
     }
   }, []);
@@ -40,9 +40,11 @@ export function useReminders(
         const isDue =
           med.reminderTime === currentTime && !takenIds.includes(med._id);
         if (isDue) {
-          new Notification("Time to take your medicine", {
-            body: `${med.name} — ${med.dosage}`,
-          });
+          if (typeof Notification !== "undefined" && Notification.permission === "granted") {
+            new Notification("Time to take your medicine", {
+              body: `${med.name} — ${med.dosage}`,
+            });
+          }
 
           if (userEmail) {
             fetch("/api/send-reminder", {

@@ -9,6 +9,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { NavigationMenu } from "@base-ui/react/navigation-menu";
 
 const navLinks = [
@@ -18,14 +19,16 @@ const navLinks = [
 ];
 
 const Navbar = () => {
+  const pathname = usePathname();
+
   return (
-    <NavigationMenu.Root className="flex items-center w-full h-14 border-b border-white/20 px-6">
-      <NavigationMenu.List className="flex items-center gap-6 list-none m-0 p-0">
+    <NavigationMenu.Root className="flex items-center w-full h-14 border-b border-white/10 px-4 sm:px-6 sticky top-0 z-50 bg-background/80 backdrop-blur-md">
+      <NavigationMenu.List className="flex items-center gap-4 sm:gap-6 list-none m-0 p-0">
         {navLinks.map((link) => (
           <NavigationMenu.Item key={link.href}>
             <NavigationMenu.Link
               render={<Link href={link.href} />}
-              className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
+              className={`text-sm font-medium transition-colors ${pathname === link.href ? "text-foreground" : "text-foreground/70 hover:text-foreground"}`}
             >
               {link.label}
             </NavigationMenu.Link>

@@ -11,13 +11,16 @@
   "dependencies": {
     "@base-ui/react": "^1.2.0",
     "@clerk/nextjs": "^6.38.1",
+    "@clerk/themes": "^2.4.56",
+    "@hiseb/confetti": "^2.1.0",
     "@vercel/analytics": "^1.6.1",
     "base-ui": "^0.0.294",
     "convex": "^1.32.0",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "resend": "^6.9.2"
+    "resend": "^6.9.2",
+    "sonner": "^2.0.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

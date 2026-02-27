@@ -18,9 +18,16 @@ const Page = () => {
   const medicines = useQuery(api.medicines.list);
   const removeMedicine = useMutation(api.medicines.remove);
 
+  const today = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
+
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <div className="flex items-center justify-between mb-8">
+    <div className="max-w-2xl mx-auto px-4 py-6 sm:px-6">
+      <p className="text-sm text-foreground/50 mb-1 mt-2 sm:mt-0">{today}</p>
+      <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-semibold">My Medicines</h1>
         {isSignedIn && <AddMedicineDialog />}
       </div>
@@ -43,7 +50,7 @@ const Page = () => {
         {medicines?.map((medicine) => (
           <div
             key={medicine._id}
-            className="flex items-center justify-between p-4 rounded-lg border border-white/20"
+            className="flex items-center justify-between p-4 rounded-lg border border-white/20 hover:bg-white/5 transition-colors"
           >
             <div>
               <p className="font-medium">{medicine.name}</p>
@@ -51,7 +58,7 @@ const Page = () => {
             </div>
             <button
               onClick={() => removeMedicine({ id: medicine._id })}
-              className="text-sm text-foreground/50 hover:text-foreground transition-colors cursor-pointer"
+              className="text-sm text-foreground/50 hover:text-red-600 transition-colors cursor-pointer"
             >
               Remove
             </button>

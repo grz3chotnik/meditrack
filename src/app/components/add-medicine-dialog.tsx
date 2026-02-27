@@ -34,9 +34,9 @@ const AddMedicineDialog = () => {
       <Dialog.Trigger className="bg-foreground text-background px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition-opacity cursor-pointer">
         + Add medicine
       </Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Backdrop className="fixed inset-0 bg-black/50" />
-        <Dialog.Popup className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--background)] border border-white/20 rounded-lg p-6 w-full max-w-md">
+      <Dialog.Portal keepMounted>
+        <Dialog.Backdrop className="fixed inset-0 bg-black/50 transition-opacity duration-200 data-[open]:opacity-100 data-[closed]:opacity-0" />
+        <Dialog.Popup className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--background)] border border-white/20 rounded-lg p-6 w-[calc(100%-2rem)] sm:w-full max-w-md transition-all duration-200 data-[open]:opacity-100 data-[open]:scale-100 data-[closed]:opacity-0 data-[closed]:scale-95">
           <Dialog.Title className="text-lg font-semibold mb-4">
             Add medicine
           </Dialog.Title>
