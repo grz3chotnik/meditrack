@@ -4,11 +4,11 @@ import { useMutation, useQuery } from "convex/react";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { Progress } from "@base-ui/react/progress";
-import {api} from "../../../convex/_generated/api";
-import {useReminders} from "@/app/hooks/useReminders";
+import { api } from "../../../convex/_generated/api";
+import { useReminders } from "@/app/hooks/useReminders";
 
 export default function Home() {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const medicines = useQuery(api.medicines.list);
   const takenToday = useQuery(api.takenHistory.listToday);
   const markTaken = useMutation(api.takenHistory.markTaken);
@@ -33,7 +33,7 @@ export default function Home() {
     <div className="max-w-2xl mx-auto px-4 py-6 sm:px-6">
       <p className="text-sm text-foreground/50 mb-1 mt-2 sm:mt-0">{today}</p>
       <h1 className="text-2xl font-semibold mb-4">
-        {`${greeting}, ${user?.firstName}`}
+        {isLoaded ? `${greeting}, ${user?.firstName}` : greeting}
       </h1>
 
       {medicines && medicines.length > 0 && (
