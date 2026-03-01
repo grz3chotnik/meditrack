@@ -61,7 +61,7 @@ export const send = internalAction({
 
     for (const medicine of dueMedicines) {
       await resend.emails.send({
-        from: "MediTrack <onboarding@resend.dev>",
+        from: "MediTrack <reminders@2004.lol>",
         to: medicine.email,
         subject: `Reminder: Time to take ${medicine.medicineName}`,
         html: `<p>It's time to take <strong>${medicine.medicineName}</strong> (${medicine.dosage}).</p>`,
