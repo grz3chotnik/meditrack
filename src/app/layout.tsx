@@ -49,6 +49,8 @@ export default function RootLayout({
           <ConvexClientProvider>
             <Navbar />
             {children}
+            <Analytics />
+
             <Toaster
               theme="dark"
               richColors
@@ -67,7 +69,6 @@ export default function RootLayout({
                 },
               }}
             />
-            <Analytics />
           </ConvexClientProvider>
         </body>
       </html>
