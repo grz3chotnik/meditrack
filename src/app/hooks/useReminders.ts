@@ -12,7 +12,6 @@ type Medicine = {
 export function useReminders(
   medicines: Medicine[] | undefined,
   takenIds: string[],
-  userEmail: string | undefined,
 ) {
   //ask for permission on first load
   useEffect(() => {
@@ -46,21 +45,11 @@ export function useReminders(
             });
           }
 
-          if (userEmail) {
-            fetch("/api/send-reminder", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                medicineName: med.name,
-                dosage: med.dosage,
-                email: userEmail,
-              }),
-            });
-          }
+
         }
       }
     }, 10_000);
 
     return () => clearInterval(interval);
-  }, [medicines, takenIds, userEmail]);
+  }, [medicines, takenIds]);
 }

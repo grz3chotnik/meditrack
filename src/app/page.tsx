@@ -1,137 +1,61 @@
-"use client";
+import { SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
 
-import { useMutation, useQuery } from "convex/react";
-import { useUser } from "@clerk/nextjs";
-import { api } from "../../convex/_generated/api";
-import { useReminders } from "./hooks/useReminders";
-import { toast } from "sonner";
-import { Progress } from "@base-ui/react/progress";
+export default async function LandingPage() {
+  const { userId } = await auth();
 
-export default function Home() {
-  const { isSignedIn, user, isLoaded } = useUser();
-  const medicines = useQuery(api.medicines.list);
-  const takenToday = useQuery(api.takenHistory.listToday);
-  const markTaken = useMutation(api.takenHistory.markTaken);
-  const unmarkTaken = useMutation(api.takenHistory.unmarkTaken);
-
-  const today = new Date().toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  });
-
-  const timeToday = new Date();
-  const hour = timeToday.getHours();
-  const greeting =
-    hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
-
-  const takenIds = takenToday?.map((entry) => entry.medicineId) ?? [];
-
-  useReminders(medicines, takenIds, user?.primaryEmailAddress?.emailAddress);
+  if (userId) {
+    redirect("/home");
+  }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6 sm:px-6">
-      <p className="text-sm text-foreground/50 mb-1 mt-2 sm:mt-0">{today}</p>
-      <h1 className="text-2xl font-semibold mb-4">
-        {isSignedIn ? `${greeting}, ${user?.firstName}` : "Today's Medicines"}
-      </h1>
-
-      {isSignedIn && medicines && medicines.length > 0 && (
-        <Progress.Root
-          value={takenIds.length}
-          max={medicines.length}
-          className="mb-6"
-        >
-          <div className="flex items-center justify-between text-sm mb-2">
-            <Progress.Label className="text-foreground/50">
-              {takenIds.length}/{medicines.length} taken
-            </Progress.Label>
-          </div>
-          <Progress.Track className="w-full h-2 rounded-full bg-white/10">
-            <Progress.Indicator className="h-full rounded-full bg-green-500 transition-all duration-300" />
-          </Progress.Track>
-        </Progress.Root>
-      )}
-
-      {isLoaded && !isSignedIn && (
-        <p className="text-sm text-foreground/50">
-          Sign in to see your medicines.
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-3.5rem)] px-6">
+      <div className="max-w-2xl text-center space-y-8">
+        <h1 className="text-5xl sm:text-6xl font-bold tracking-tight">
+          MediTrack
+        </h1>
+        <p className="text-lg sm:text-xl text-foreground/60 max-w-lg mx-auto">
+          Never miss a dose. Track your medicines, get reminders, and stay on
+          top of your health. All in one place.
         </p>
-      )}
 
-      {isSignedIn && (medicines === undefined || takenToday === undefined) && (
-        <p className="text-sm text-foreground/50">Loading...</p>
-      )}
+        <div className="flex items-center justify-center gap-4">
+          <SignedOut>
+            <SignUpButton>
+              <button className="bg-foreground text-background px-6 py-2.5 rounded-md font-medium hover:opacity-90 transition-opacity cursor-pointer">
+                Get started
+              </button>
+            </SignUpButton>
+            <SignInButton>
+              <button className="px-6 py-2.5 rounded-md font-medium border border-white/10 hover:bg-white/5 transition-colors cursor-pointer">
+                Sign in
+              </button>
+            </SignInButton>
+          </SignedOut>
+        </div>
 
-      {isSignedIn &&
-        medicines !== undefined &&
-        takenToday !== undefined &&
-        medicines.length === 0 && (
-          <p className="text-sm text-foreground/50">
-            No medicines due today. Add some from the dashboard.
-          </p>
-        )}
-
-      {takenToday !== undefined &&
-        medicines?.map((med) => {
-          const taken = takenIds.includes(med._id);
-          const overdue =
-            !taken &&
-            med.reminderTime &&
-            timeToday.getHours() + ":" + timeToday.getMinutes() >
-              med.reminderTime;
-          return (
-            <div
-              key={med._id}
-              onClick={(e) => {
-                if (taken) {
-                  unmarkTaken({ medicineId: med._id });
-                  toast(`Unmarked ${med.name}`);
-                } else {
-                  markTaken({ medicineId: med._id });
-                  toast.success(`${med.name} marked as taken!`);
-                  import("@hiseb/confetti").then(({ default: confetti }) =>
-                    confetti({
-                      position: { x: e.clientX, y: e.clientY },
-                      count: 200,
-                      size: 2,
-                      velocity: 250,
-                      fade: true,
-                    }),
-                  );
-                }
-              }}
-              className={`flex items-center gap-3 p-4 mb-3 rounded-lg border cursor-pointer transition-colors ${overdue ? "border-red-500 hover:bg-red-500/10" : "border-white/20 hover:bg-white/5"} ${taken ? "opacity-50" : ""}`}
-            >
-              <div className="flex-shrink-0">
-                {taken ? (
-                  <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path
-                        d="M3 7l3 3 5-5"
-                        stroke="white"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-                ) : (
-                  <div className="w-6 h-6 rounded-full border-2 border-white/30 hover:border-green-400 transition-colors" />
-                )}
-              </div>
-              <div>
-                <p className={`font-medium ${taken ? "line-through" : ""}`}>
-                  {med.name}
-                </p>
-                <p className="text-sm text-foreground/50">
-                  {med.dosage}
-                  {med.reminderTime && <> &middot; {med.reminderTime}</>}
-                </p>
-              </div>
-            </div>
-          );
-        })}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 border-t border-white/10">
+          <div className="space-y-2">
+            <h3 className="font-semibold">Track daily</h3>
+            <p className="text-sm text-foreground/50">
+              Check off medicines as you take them throughout the day.
+            </p>
+          </div>
+          <div className="space-y-2">
+            <h3 className="font-semibold">Get reminders</h3>
+            <p className="text-sm text-foreground/50">
+              Desktop and email notifications so you never forget a dose.
+            </p>
+          </div>
+          <div className="space-y-2">
+            <h3 className="font-semibold">Stay organized</h3>
+            <p className="text-sm text-foreground/50">
+              Manage all your medicines and dosages in one dashboard.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

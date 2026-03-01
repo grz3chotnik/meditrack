@@ -8,8 +8,10 @@
  * @module
  */
 
+import type * as crons from "../crons.js";
 import type * as helpers from "../helpers.js";
 import type * as medicines from "../medicines.js";
+import type * as reminders from "../reminders.js";
 import type * as takenHistory from "../takenHistory.js";
 import type * as users from "../users.js";
 
@@ -20,8 +22,10 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  crons: typeof crons;
   helpers: typeof helpers;
   medicines: typeof medicines;
+  reminders: typeof reminders;
   takenHistory: typeof takenHistory;
   users: typeof users;
 }>;

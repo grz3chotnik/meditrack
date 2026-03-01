@@ -2,18 +2,14 @@
 
 import React, { useEffect } from "react";
 import { useMutation, useQuery } from "convex/react";
-import { useUser } from "@clerk/nextjs";
 import { api } from "../../../convex/_generated/api";
 import AddMedicineDialog from "@/app/components/add-medicine-dialog";
 
 const Page = () => {
-  const { isSignedIn } = useUser();
   const storeUser = useMutation(api.users.store);
   useEffect(() => {
-    if (isSignedIn) {
-      storeUser();
-    }
-  }, [isSignedIn, storeUser]);
+    storeUser();
+  }, [storeUser]);
 
   const medicines = useQuery(api.medicines.list);
   const removeMedicine = useMutation(api.medicines.remove);
@@ -29,14 +25,8 @@ const Page = () => {
       <p className="text-sm text-foreground/50 mb-1 mt-2 sm:mt-0">{today}</p>
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-semibold">My Medicines</h1>
-        {isSignedIn && <AddMedicineDialog />}
+        <AddMedicineDialog />
       </div>
-
-      {!isSignedIn && (
-        <p className="text-sm text-foreground/50">
-          Sign in to manage your medicines.
-        </p>
-      )}
 
       <div className="flex flex-col gap-3">
         {medicines === undefined && (
