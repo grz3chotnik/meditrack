@@ -23,7 +23,7 @@ const Navbar = () => {
   return (
     <NavigationMenu.Root className="flex items-center w-full h-14 border-b border-white/10 px-4 sm:px-6 sticky top-0 z-50 bg-background/80 backdrop-blur-md">
       <NavigationMenu.List className="flex items-center gap-4 sm:gap-6 list-none m-0 p-0">
-        <Link href="/">LOGO</Link>
+        <Link className="font-extrabold text-2xl" href="/">MeditTrack</Link>
         {navLinks.map((link) => (
           <NavigationMenu.Item key={link.href}>
             <NavigationMenu.Link
